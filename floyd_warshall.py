@@ -1,9 +1,10 @@
 import sys
 
-# --- FUNÇÃO 2: CALCULAR TODAS AS ROTAS (O ALGORITMO PRINCIPAL) ---
+
 def floyd_warshall(num_vertices, arestas):
     """Calcula as distâncias mais curtas entre todos os pares de cidades."""
     # Prepara a "Tabela de Tempos" (dist) e a "Tabela de Placas" (prev)
+    contagem_inicial = time.time()
     dist = [[float('inf')] * num_vertices for _ in range(num_vertices)]
     prev = [[None] * num_vertices for _ in range(num_vertices)]
 
@@ -23,4 +24,6 @@ def floyd_warshall(num_vertices, arestas):
                     dist[i][j] = dist[i][k] + dist[k][j]
                     prev[i][j] = prev[k][j]
     
-    return dist, prev
+    contagem_final = time.time()  # Fim do time
+    tempo_execucao = contagem_final - contagem_inicial
+    return dist, prev, tempo_execucao
