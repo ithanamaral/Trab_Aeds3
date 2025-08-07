@@ -1,1 +1,0 @@
-print("Íthan lindão")
