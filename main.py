@@ -48,10 +48,10 @@ if __name__ == "__main__":
     caminho, custo, tempo, memoria = caminhoMinimo.dijkstra(grafo, origem, destino)
     imprimir_resultado("Dijkstra", caminho, custo, tempo, memoria)
 
-    #bellman-Ford
+    #bellman-ford
     caminho, custo, tempo, memoria = caminhoMinimo.bellman_ford(grafo, origem, destino)
     imprimir_resultado("Bellman-Ford", caminho, custo, tempo, memoria)
 
-    #floyd-Warshall
+    #floyd-warshall
     caminho, custo, tempo, memoria = caminhoMinimo.floyd_warshall(grafo, origem, destino)
     imprimir_resultado("Floyd-Warshall", caminho, custo, tempo, memoria)
