@@ -41,7 +41,7 @@ if __name__ == "__main__":
 
     grafo = leitura_dimacs(arquivo)
 
-    print("Processando ...\n")
+    print("Processando...\n")
     print("----------------------------------------------------------")
 
     #dijkstra
