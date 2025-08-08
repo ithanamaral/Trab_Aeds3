@@ -23,7 +23,7 @@ class MatrizAdjacencias:
             self.graus[v1] += 1
         self.matriz[v1][v2] = peso
 
-    # retorna True se existe uma aresta (v1,v2) no grafo:
+    # retorna True se existe uma aresta (v1,v2) no grafo:=
     def possuiAresta(self, v1, v2):
         return self.matriz[v1][v2] != 0
 

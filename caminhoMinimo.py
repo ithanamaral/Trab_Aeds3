@@ -1,19 +1,19 @@
 import time
 import math
-# import psutil
-# import os
+import psutil
+import os
 import heapq
 
 LIMITE_TEMPO = 600
-# MEMORIA_DISPONIVEL_MB = psutil.virtual_memory().available / (1024*1024)
+MEMORIA_DISPONIVEL_MB = psutil.virtual_memory().available / (1024*1024)
 
 
 # ---------- DIJKSTRA --------------
 
 def dijkstra(g, s, t):
-    inicio_tempo = time.time() # começa o timer pra medir o tempo de execução
 
-    # inicio_mem = psutil.Process(os.getpid()).memory_info().rss
+    inicio_tempo = time.time() # começa o timer pra medir o tempo de execução
+    inicio_mem = psutil.Process(os.getpid()).memory_info().rss
 
     dist = [math.inf] * g.numVertices  # inicializa as distancias como infinito
     prev = [None] * g.numVertices  # inicializa todos os predecessores como nulo
@@ -24,11 +24,12 @@ def dijkstra(g, s, t):
     C = set() # conjunto de vertices já processados
 
     while C != set(range(g.numVertices)):
-        # Controle de tempo limite
+        # controle de tempo limite
         if time.time() - inicio_tempo > LIMITE_TEMPO:
             return [], "TEMPO LIMITE", "TEMPO LIMITE", "TEMPO LIMITE"
-        # if uso_memoria_mb() > MEMORIA_DISPONIVEL_MB:
-        #     return [], "MEMORIA EXCEDIDA", "MEMORIA EXCEDIDA", "MEMORIA EXCEDIDA"
+        # controle de memoria
+        if uso_memoria_mb() > MEMORIA_DISPONIVEL_MB:
+            return [], "MEMORIA EXCEDIDA", "MEMORIA EXCEDIDA", "MEMORIA EXCEDIDA"
 
         u = min(O, key=lambda x: dist[x])  #seleciona o vértice com a menor distância
         C.add(u)  #percorre todos os vizinhos de u com seus respectivos pesos
@@ -43,16 +44,17 @@ def dijkstra(g, s, t):
 
     fim_tempo = time.time()
 
-    # fim_mem = psutil.Process(os.getpid()).memory_info().rss
+    fim_mem = psutil.Process(os.getpid()).memory_info().rss #mede a memoria no final
+    memoria_usada = (fim_mem - inicio_mem) / (1024 * 1024) #converte pra megabytes
 
-    return caminho, dist[t], fim_tempo - inicio_tempo, 0.0
+    return caminho, dist[t], fim_tempo - inicio_tempo, memoria_usada
 
 
 #----------- BELLMAN-FORD -------------
 
 def bellman_ford(g, s, t):
     inicio_tempo = time.time()
-    # inicio_mem = psutil.Process(os.getpid()).memory_info().rss
+    inicio_mem = psutil.Process(os.getpid()).memory_info().rss
 
     dist = [math.inf] * g.numVertices #inicializa distâncias com infinito
     prev = [None] * g.numVertices #inicializa predecessores com null/ none
@@ -64,8 +66,8 @@ def bellman_ford(g, s, t):
         if time.time() - inicio_tempo > LIMITE_TEMPO:
             return [], "TEMPO LIMITE", "TEMPO LIMITE", "TEMPO LIMITE"
 
-        # if uso_memoria_mb() > MEMORIA_DISPONIVEL_MB:
-        #     return [], "MEMORIA EXCEDIDA", "MEMORIA EXCEDIDA", "MEMORIA EXCEDIDA"
+        if uso_memoria_mb() > MEMORIA_DISPONIVEL_MB:
+            return [], "MEMORIA EXCEDIDA", "MEMORIA EXCEDIDA", "MEMORIA EXCEDIDA"
 
         atualizou = False #flag pra verificar se houve atualização
 
@@ -87,16 +89,19 @@ def bellman_ford(g, s, t):
     caminho = reconstruir_caminho(prev, s, t)
 
     fim_tempo = time.time()
-    # fim_mem = psutil.Process(os.getpid()).memory_info().rss
-    return caminho, dist[t], fim_tempo - inicio_tempo, 0.0
+
+    fim_mem = psutil.Process(os.getpid()).memory_info().rss
+    memoria_usada = (fim_mem - inicio_mem) / (1024 * 1024)
+    return caminho, dist[t], fim_tempo - inicio_tempo, memoria_usada
 
 
 
 #----------- FLOYD-WARSHALL ---------------
 
 def floyd_warshall(g, s, t):
+
     inicio_tempo = time.time()
-    # inicio_mem = psutil.Process(os.getpid()).memory_info().rss
+    inicio_mem = psutil.Process(os.getpid()).memory_info().rss
 
     V = g.numVertices
     dist = [[math.inf] * V for _ in range(V)] #matriz de distancias inicializada com infinito
@@ -117,10 +122,12 @@ def floyd_warshall(g, s, t):
                 prev[i][j] = None
 
     for k in range(V):
+
         if time.time() - inicio_tempo > LIMITE_TEMPO:
             return [], "TEMPO LIMITE", "TEMPO LIMITE", "TEMPO LIMITE"
-        # if uso_memoria_mb() > MEMORIA_DISPONIVEL_MB:
-        #     return [], "MEMORIA EXCEDIDA", "MEMORIA EXCEDIDA", "MEMORIA EXCEDIDA"
+
+        if uso_memoria_mb() > MEMORIA_DISPONIVEL_MB:
+            return [], "MEMORIA EXCEDIDA", "MEMORIA EXCEDIDA", "MEMORIA EXCEDIDA"
 
         #verifica se passar por k deixa o caminho entre i e j mais curto
         for i in range(V):
@@ -132,16 +139,18 @@ def floyd_warshall(g, s, t):
     caminho = reconstruir_caminho_fw(prev, s, t)
 
     fim_tempo = time.time()
-    # fim_mem = psutil.Process(os.getpid()).memory_info().rss
-    return caminho, dist[s][t], fim_tempo - inicio_tempo, 0.0
+    fim_mem = psutil.Process(os.getpid()).memory_info().rss
+    memoria_usada = (fim_mem - inicio_mem) / (1024 * 1024)
+
+    return caminho, dist[s][t], fim_tempo - inicio_tempo, memoria_usada
 
 
 #---------------------
 # Funções auxiliares
 #---------------------
 
-# def uso_memoria_mb():
-#     return psutil.Process(os.getpid()).memory_info().rss / (1024*1024)
+def uso_memoria_mb():
+    return psutil.Process(os.getpid()).memory_info().rss / (1024*1024)
 
 #reconstroi o caminho usando a lista de predecessores de s até t
 def reconstruir_caminho(prev, s, t):

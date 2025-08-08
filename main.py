@@ -44,14 +44,14 @@ if __name__ == "__main__":
     print("Processando...\n")
     print("----------------------------------------------------------")
 
-    #dijkstra
+    #DIJKSTRA
     caminho, custo, tempo, memoria = caminhoMinimo.dijkstra(grafo, origem, destino)
     imprimir_resultado("Dijkstra", caminho, custo, tempo, memoria)
 
-    #bellman-ford
+    #BELLMAN-FORD
     caminho, custo, tempo, memoria = caminhoMinimo.bellman_ford(grafo, origem, destino)
     imprimir_resultado("Bellman-Ford", caminho, custo, tempo, memoria)
 
-    #floyd-warshall
+    #FLOYD-WARSHALL
     caminho, custo, tempo, memoria = caminhoMinimo.floyd_warshall(grafo, origem, destino)
     imprimir_resultado("Floyd-Warshall", caminho, custo, tempo, memoria)
