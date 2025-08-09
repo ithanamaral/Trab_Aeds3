@@ -45,7 +45,11 @@ def dijkstra(g, s, t):
     fim_tempo = time.time()
 
     fim_mem = psutil.Process(os.getpid()).memory_info().rss #mede a memoria no final
-    memoria_usada = (fim_mem - inicio_mem) / (1024 * 1024) #converte pra megabytes
+
+    memoria_usada = abs(fim_mem - inicio_mem) / (1024 * 1024)
+
+    tempo_execucao = max(0, fim_tempo - inicio_tempo)
+
 
     return caminho, dist[t], fim_tempo - inicio_tempo, memoria_usada
 
@@ -91,7 +95,9 @@ def bellman_ford(g, s, t):
     fim_tempo = time.time()
 
     fim_mem = psutil.Process(os.getpid()).memory_info().rss
-    memoria_usada = (fim_mem - inicio_mem) / (1024 * 1024)
+    memoria_usada = abs(fim_mem - inicio_mem) / (1024 * 1024)
+    tempo_execucao = max(0, fim_tempo - inicio_tempo)
+
     return caminho, dist[t], fim_tempo - inicio_tempo, memoria_usada
 
 
@@ -140,7 +146,8 @@ def floyd_warshall(g, s, t):
 
     fim_tempo = time.time()
     fim_mem = psutil.Process(os.getpid()).memory_info().rss
-    memoria_usada = (fim_mem - inicio_mem) / (1024 * 1024)
+    memoria_usada = abs(fim_mem - inicio_mem) / (1024 * 1024)
+    tempo_execucao = max(0, fim_tempo - inicio_tempo)
 
     return caminho, dist[s][t], fim_tempo - inicio_tempo, memoria_usada
 

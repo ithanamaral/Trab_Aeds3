@@ -41,6 +41,10 @@ if __name__ == "__main__":
 
     grafo = leitura_dimacs(arquivo)
 
+    print(f"Ordem: {grafo.ordem()}")
+    print(f"Tamanho: {grafo.tamanho()}")
+
+
     print("Processando...\n")
     print("----------------------------------------------------------")
 
