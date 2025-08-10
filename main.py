@@ -28,11 +28,11 @@ def imprimir_resultado(nome_alg, caminho, custo, tempo, memoria):
         print(f"Custo: {custo}")
         print(f"Tempo execução: {tempo:.3f} s")
         print(f"Memória utilizada: {memoria:.4f} MB")
-    print("----------------------------------------------------------")
+    print("---------------------------------------------------------")
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
-        print("Uso: python main.py <arquivo_grafo> <vertice_origem> <vertice_destino>")
+        print("Uso correto: python main.py <arquivo_grafo.txt> <vertice_origem> <vertice_destino>")
         sys.exit(1)
 
     arquivo = sys.argv[1]
@@ -45,8 +45,8 @@ if __name__ == "__main__":
     print(f"Tamanho: {grafo.tamanho()}")
 
 
-    print("Processando...\n")
-    print("----------------------------------------------------------")
+    print("\nProcessando...\n")
+    print("---------------------------------------------------------")
 
     #DIJKSTRA
     caminho, custo, tempo, memoria = caminhoMinimo.dijkstra(grafo, origem, destino)

@@ -2,7 +2,7 @@ import time
 import math
 import psutil
 import os
-import heapq
+#import heapq
 
 LIMITE_TEMPO = 600
 MEMORIA_DISPONIVEL_MB = psutil.virtual_memory().available / (1024*1024)
@@ -24,14 +24,14 @@ def dijkstra(g, s, t):
     C = set() # conjunto de vertices já processados
 
     while C != set(range(g.numVertices)):
-        # controle de tempo limite
+        # controle de limites de tempo e memoria
         if time.time() - inicio_tempo > LIMITE_TEMPO:
             return [], "TEMPO LIMITE", "TEMPO LIMITE", "TEMPO LIMITE"
-        # controle de memoria
         if uso_memoria_mb() > MEMORIA_DISPONIVEL_MB:
             return [], "MEMORIA EXCEDIDA", "MEMORIA EXCEDIDA", "MEMORIA EXCEDIDA"
 
-        u = min(O, key=lambda x: dist[x])  #seleciona o vértice com a menor distância
+        #seleciona o vertice com a menor distancia
+        u = min(O, key=lambda x: dist[x])  #equivalente ao extrair-min no pseudocódigo
         C.add(u)  #percorre todos os vizinhos de u com seus respectivos pesos
         O.remove(u) #verifica se encontrou caminho mais curto para v
 
@@ -48,7 +48,7 @@ def dijkstra(g, s, t):
 
     memoria_usada = abs(fim_mem - inicio_mem) / (1024 * 1024)
 
-    tempo_execucao = max(0, fim_tempo - inicio_tempo)
+    #tempo_execucao = max(0, fim_tempo - inicio_tempo)
 
 
     return caminho, dist[t], fim_tempo - inicio_tempo, memoria_usada
@@ -61,12 +61,14 @@ def bellman_ford(g, s, t):
     inicio_mem = psutil.Process(os.getpid()).memory_info().rss
 
     dist = [math.inf] * g.numVertices #inicializa distâncias com infinito
-    prev = [None] * g.numVertices #inicializa predecessores com null/ none
+    prev = [None] * g.numVertices #inicializa predecessores com valor nulo
 
     dist[s] = 0
     prev[s] = s
 
-    for _ in range(g.numVertices - 1): # vai repetir |V|-1 vezes
+    for _ in range(g.numVertices - 1): # vai repetir V - 1 vezes
+
+        #verifica se o tempo ou memoria estouraram os limites
         if time.time() - inicio_tempo > LIMITE_TEMPO:
             return [], "TEMPO LIMITE", "TEMPO LIMITE", "TEMPO LIMITE"
 
@@ -96,7 +98,7 @@ def bellman_ford(g, s, t):
 
     fim_mem = psutil.Process(os.getpid()).memory_info().rss
     memoria_usada = abs(fim_mem - inicio_mem) / (1024 * 1024)
-    tempo_execucao = max(0, fim_tempo - inicio_tempo)
+    #tempo_execucao = max(0, fim_tempo - inicio_tempo)
 
     return caminho, dist[t], fim_tempo - inicio_tempo, memoria_usada
 
@@ -129,6 +131,7 @@ def floyd_warshall(g, s, t):
 
     for k in range(V):
 
+        #verifica se o tempo ou memoria estouraram o limite
         if time.time() - inicio_tempo > LIMITE_TEMPO:
             return [], "TEMPO LIMITE", "TEMPO LIMITE", "TEMPO LIMITE"
 
@@ -147,19 +150,20 @@ def floyd_warshall(g, s, t):
     fim_tempo = time.time()
     fim_mem = psutil.Process(os.getpid()).memory_info().rss
     memoria_usada = abs(fim_mem - inicio_mem) / (1024 * 1024)
-    tempo_execucao = max(0, fim_tempo - inicio_tempo)
+    #tempo_execucao = max(0, fim_tempo - inicio_tempo)
+    #abs vai evitar/negar valores negativos
 
     return caminho, dist[s][t], fim_tempo - inicio_tempo, memoria_usada
 
 
-#---------------------
+#--------------------
 # Funções auxiliares
-#---------------------
+#--------------------
 
 def uso_memoria_mb():
     return psutil.Process(os.getpid()).memory_info().rss / (1024*1024)
 
-#reconstroi o caminho usando a lista de predecessores de s até t
+#reconstroi o caminho seguindo a lógica do pseudocódigo fornecido no pdf do trabalho
 def reconstruir_caminho(prev, s, t):
     caminho = [] # lista que vai guardar o caminho na ordem certa
     u = t # começa do destino
