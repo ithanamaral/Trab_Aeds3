@@ -2,6 +2,7 @@ import sys
 from matrizAdjacencias import MatrizAdjacencias
 import caminhoMinimo
 
+#funcao pra ler um arquivo no formato dimacs e criar grafo
 def leitura_dimacs(nomeArquivo):
     with open(nomeArquivo, "r") as arquivo:
         primeira_linha = arquivo.readline().strip().split()
@@ -10,6 +11,7 @@ def leitura_dimacs(nomeArquivo):
 
         grafo = MatrizAdjacencias(numVertices)
 
+        #le todas as arestas do arquivo e adiciona no grafo
         for _ in range(numArestas):
             linha = arquivo.readline().strip().split()
             origem = int(linha[0])
@@ -21,6 +23,7 @@ def leitura_dimacs(nomeArquivo):
 
 def imprimir_resultado(nome_alg, caminho, custo, tempo, memoria):
     print(f"Algoritmo de {nome_alg}:")
+    #verifica se o resultado foi interrompido por tempo ou memoria
     if isinstance(custo, str) and (custo == "TEMPO LIMITE" or custo == "MEMORIA EXCEDIDA" or custo == "CICLO NEGATIVO"):
         print(f"Resultado: {custo}")
     else:
@@ -39,7 +42,7 @@ if __name__ == "__main__":
     origem = int(sys.argv[2])
     destino = int(sys.argv[3])
 
-    grafo = leitura_dimacs(arquivo)
+    grafo = leitura_dimacs(arquivo) #le o grafo do arquivo
 
     print(f"Ordem: {grafo.ordem()}")
     print(f"Tamanho: {grafo.tamanho()}")
@@ -47,6 +50,8 @@ if __name__ == "__main__":
 
     print("\nProcessando...\n")
     print("---------------------------------------------------------")
+
+    #agora vai executar cada algoritmo e imprimir os resultados
 
     #DIJKSTRA
     caminho, custo, tempo, memoria = caminhoMinimo.dijkstra(grafo, origem, destino)
