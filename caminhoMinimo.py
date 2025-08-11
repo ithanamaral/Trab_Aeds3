@@ -163,7 +163,7 @@ def floyd_warshall(g, s, t):
 def uso_memoria_mb():
     return psutil.Process(os.getpid()).memory_info().rss / (1024*1024)
 
-#reconstroi o caminho seguindo a lógica do pseudocódigo fornecido no pdf do trabalho
+#reconstroi o caminho seguindo a lógica do pdf do trabalho
 def reconstruir_caminho(prev, s, t):
     caminho = [] # lista que vai guardar o caminho na ordem certa
     u = t # começa do destino
